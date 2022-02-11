@@ -83,17 +83,7 @@ const app = createApp({
         delProductModal.show()
       }
     },
-    delProduct() {
-      const url = `${site}/api/${apiPath}/admin/product/${this.tempProduct.id}`;
-      // 用刪除的 api 方法 delete
-      axios.delete(url).then((response) => {
-        alert(response.data.message);
-        delProductModal.hide();
-        this.getData();
-      }).catch((err) => {
-        alert(err.data.message);
-      })
-    },
+
     
   },
   mounted() {
@@ -151,6 +141,26 @@ app.component('productModal',{
     createImages() {
       this.tempProduct.imagesUrl = [];
       this.tempProduct.imagesUrl.push('');
+    },
+  }
+})
+
+app.component('delModal',{
+  props:['tempProduct','isNew'],
+  template:'#templateForDelModal',
+  methods:{
+    // 新增、編輯只有方法不同，modal打開都長一樣，一個有帶資料一個沒有帶，其他程式碼都差不多，所以可以共用
+    delProduct() {
+      const url = `${site}/api/${apiPath}/admin/product/${this.tempProduct.id}`;
+      // 用刪除的 api 方法 delete
+      axios.delete(url).then((response) => {
+        alert(response.data.message);
+        delProductModal.hide();
+        // this.getData();
+        this.$emit('get-products')
+      }).catch((err) => {
+        alert(err.data.message);
+      })
     },
   }
 })
